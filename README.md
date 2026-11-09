@@ -3,8 +3,8 @@
 Sumativa 1 · Fases 1 y 2 · MCDI500 Programación para la Ciencia de Datos · Magíster en Inteligencia Artificial, UNAB
 Entrega: **domingo 8 de noviembre de 2026, 23:59** · Vale 40 % de la nota · Trabajo grupal
 
-**Integrantes:** Jose, Ale Poirer, TODO(humano): completar con nombres completos y el resto del grupo
-**Docente:** TODO(humano)
+**Integrantes:** Jose Fredes, Alejandro Poirer, Valentina Carvajal, Angelo Morales
+**Docente:** Omar Salinas
 
 ---
 
@@ -46,9 +46,9 @@ Entregables: informe PDF, este repo (carpetas `F1/` y `F2/`, README, dependencia
 | Validación y pruebas (`F2_03`) | Jose |
 | Notebook F1 (problema, objetivos, alcance) | Ale |
 | Limpieza y transformación (`F2_02`) | Ale |
-| Informe PDF (portada, índice, formato) | TODO(humano) |
-| Mapa conceptual y su vinculación con el proyecto | TODO(humano) |
-| Bibliografía APA 7 (mínimo 5 fuentes) | TODO(humano) |
+| Informe PDF (portada, índice, formato) | Todos |
+| Mapa conceptual y su vinculación con el proyecto | Valentina, Angelo |
+| Bibliografía APA 7 (mínimo 5 fuentes) | Valentina, Jose |
 | Revisión cruzada antes de entregar | Todos |
 
 ## Cómo trabajamos
@@ -84,20 +84,19 @@ Revisamos el dataset con el `validar_dataset.py` del curso, sobre una muestra ap
 
 - [x] Repo, entorno, `requirements.txt` y estructura (Jose)
 - [x] Descarga con SHA-256 y exploración inicial: `F2/F2_01_acquisition_exploration.ipynb` (Jose)
-- [ ] Notebook F1 (Alejandro)
-- [ ] Limpieza y transformación, `F2_02` (Alejandro). Parte de `load_raw()`; los hallazgos de `F2_01` (sección 9) dicen qué limpiar
-- [x] Validación (`validation.py`, 51 pruebas) y notebook `F2_03` sobre el dato original (Jose)
-- [ ] `F2_03` sobre el dataset procesado (depende de `F2_02`)
-- [x] Evidencias de `make all` desde un clon limpio, en `docs/evidence/`
-- [ ] Informe PDF, mapa conceptual y bibliografía
+- [x] Notebook F1: `F1/F1_Definicion.ipynb` (Alejandro)
+- [x] Limpieza y transformación: `F2/F2_02_cleaning_transformation.ipynb` y `src/arena/preprocessing.py` (Alejandro)
+- [x] Validación (`validation.py`, 55 pruebas con `pytest`) y notebook `F2/F2_03_validation.ipynb` sobre dato original y procesado (Jose)
+- [x] Evidencias de `make all` desde un clon limpio y verificación en múltiples equipos, en `docs/evidence/`
+- [x] Informe técnico integrado, mapa conceptual actualizado y bibliografía APA 7 (Valentina, Angelo, Alejandro, Jose)
 
-## Por resolver
+## Decisiones cerradas y pendientes para Fase 3
 
-- [ ] ¿Trabajamos con el dataset completo (~1,6 GB) o con una muestra?
-- [ ] ¿Qué hacemos con los votos `tie` y `both_bad`? (la ficha no los define)
-- [ ] Confirmar con el docente que el dataset no esté repetido en otro equipo
-- [ ] Mapa conceptual de la actividad formativa (lo tiene que completar el grupo)
-- [ ] Confirmar la estructura real de las columnas anidadas una vez descargado el dato
+- [x] Trabajar con el dataset completo (135.634 filas; cargando 11 de 14 columnas ocupa ~115 MB en memoria)
+- [x] Confirmar con el docente que el dataset no esté repetido en otro equipo
+- [x] Mapa conceptual de la actividad formativa integrado con el avance de F1 y F2
+- [x] Confirmar y aplanar la estructura real de las columnas anidadas (`conv_metadata` → 26 columnas; `category_tag` → 12 columnas)
+- [ ] En Fase 3: evaluar el tratamiento analítico de `tie` y `both_bad` (se creó `winner_binary` en F2 conservando todas las filas) y el control por idioma/modelo
 
 ## Licencia
 
@@ -131,12 +130,23 @@ Nota: el log de `nbconvert` incluye un aviso de Jupyter (`Kernel is running over
 
 ### Notebooks
 
+Pasos comunes, desde la raíz:
+
+1. Crear el entorno e instalar dependencias: "make install"
+2. Activar el entorno:
+- macOS / Linux: "source .venv/bin/activate"
+- Windows (Git Bash): "source .venv/bin/activate"
+3. Abrir Jupyter desde la raíz, para que funcionen las rutas realtivas: "python -m jupyter lab"
+4. Elegir como kernel el Python de ".venv" (Jupyter: Kernel > Change Kernel ; VS Code: Select Kernel)
+5. Ejecutar Notebook de arriba a abajo
+
+
 | Notebook | Qué hace | Estado |
 |---|---|---|
-| `F1/F1_Definicion.ipynb` (es el "F1_Definición.ipynb" solicitado, sin tilde por portabilidad) | definición del problema y entorno | pendiente |
+| `F1/F1_Definicion.ipynb` (es el "F1_Definición.ipynb" solicitado, sin tilde por portabilidad) | definición del problema, entorno y condiciones iniciales | listo |
 | `F2/F2_01_acquisition_exploration.ipynb` | descarga, estructura, variables, tiempo, sesiones y muestreo | listo |
-| `F2/F2_02_cleaning_transformation.ipynb` | limpieza y transformación | pendiente |
-| `F2/F2_03_validation.ipynb` | validación y pruebas | dato original listo; falta el procesado |
+| `F2/F2_02_cleaning_transformation.ipynb` | limpieza, aplanamiento, conversión de tipos y variables derivadas | listo |
+| `F2/F2_03_validation.ipynb` | validación y pruebas (casos normales, límite y excepciones sobre dato original y procesado) | listo |
 
 ## Estructura del repo
 
@@ -146,11 +156,16 @@ LICENSE            MIT
 Makefile           install, test, data, run, all
 requirements.txt   dependencias con versión fija
 pytest.ini         configuración de pytest
-src/arena/         paquete: env, io (descarga y SHA-256), profile (inspección), plots, sampling, validation
+src/arena/         paquete: env, io (descarga y SHA-256), profile (inspección), preprocessing, plots, sampling, validation
 tests/             pruebas con datos sintéticos, sin red
-F1/                notebook de la Fase 1
-F2/                notebooks de la Fase 2
-data/raw/          dato descargado (no se versiona)
-data/processed/    dato procesado
-docs/evidence/     test and execution outputs (pytest, nbconvert)
+F1/                notebook de la Fase 1 y mapa conceptual
+F2/                notebooks de la Fase 2 (01 exploración, 02 limpieza, 03 validación)
+data/raw/          dato descargado (no se versiona; se verifica con CHECKSUMS.txt)
+data/processed/    dato procesado (arena_clean.parquet, generado por F2_02)
+docs/evidence/     test and execution outputs (pytest, nbconvert, entorno)
 ```
+
+## Declaración de uso de herramientas de apoyo (IA)
+
+- **Claude (Anthropic):** utilizado como asistente de apoyo y aprendizaje autodidacta para profundizar en los contenidos técnicos del curso y realizar el seguimiento estructurado de tareas e hitos del proyecto.
+- **Gemini (Google):** utilizado como apoyo editorial para revisar y mejorar la redacción, cohesión y comunicación escrita del informe técnico y la documentación, manteniendo todas las decisiones metodológicas, el código y la verificación de resultados a cargo de los integrantes del equipo.
